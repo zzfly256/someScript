@@ -1,0 +1,40 @@
+<?php
+$servers = file("server");
+$hosts = file("host");
+echo "----------"."-----"."-";
+for($i=0;$i<count($hosts);$i++){
+	echo "----------"."----------"."-"."-"."-"."-";
+}
+echo "\n";
+echo " 节点 / 目标"."\t|\t";
+
+$server = [];
+foreach ($servers as $value) {
+	$tmp = explode('|', $value);
+	$tmp[1] = str_replace(PHP_EOL, '', $tmp[1]); 
+	$server[trim($tmp[0])] = trim($tmp[1]);
+}
+
+foreach ($hosts as $host) {
+	$host = str_replace(PHP_EOL, '', $host);
+	echo $host."\t|\t";
+}
+
+echo "\n";
+
+foreach ($server as $key => $value) {
+	echo ' '.$key."\t|\t";
+	foreach ($hosts as $host) {
+		$host = str_replace(PHP_EOL, '', $host);
+		$ping = $value.'?host='.$host.'&count=2';
+		$action = file_get_contents($ping);
+		echo '延迟：'.$action."\t|\t"; 
+	}
+	echo "\n";
+}
+echo "----------"."-----"."-";
+for($i=0;$i<count($hosts);$i++){
+	echo "----------"."----------"."-"."-"."-"."-";
+}
+echo "\n";
+?>
